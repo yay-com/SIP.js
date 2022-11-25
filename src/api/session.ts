@@ -66,6 +66,8 @@ export abstract class Session {
    */
   public data: unknown;
 
+  public cdrUuid: string | undefined;
+
   /**
    * The session delegate.
    * @defaultValue `undefined`

@@ -857,6 +857,7 @@ export class Inviter extends Session {
           this.setSessionDescriptionHandler(sdh);
           this.earlyMediaSessionDescriptionHandlers.delete(session.id);
           inviteResponse.ack();
+
           this.stateTransition(SessionState.Established);
           return Promise.resolve();
         }
@@ -888,6 +889,7 @@ export class Inviter extends Session {
           }
           // Otherwise we are good to go.
           inviteResponse.ack();
+
           this.stateTransition(SessionState.Established);
           return Promise.resolve();
         }
@@ -910,6 +912,7 @@ export class Inviter extends Session {
                 body: { contentDisposition: "render", contentType: this._rendertype, content: this._renderbody }
               };
             }
+            this.cdrUuid = inviteResponse.message.getHeader("X-Cdr-Uuid");
             inviteResponse.ack(ackOptions);
             this.stateTransition(SessionState.Established);
           })

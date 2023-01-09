@@ -1,13 +1,12 @@
 import { Grammar } from "../grammar/grammar.js";
 import { NameAddrHeader } from "../grammar/name-addr-header.js";
 import { Body, fromBodyLegacy, getBody } from "../core/messages/body.js";
-import { IncomingInviteRequest } from "../core/messages/methods/invite.js";
+import { IncomingInviteRequest, OutgoingResponseWithSession } from "../core/messages/methods/invite.js";
 import { IncomingPrackRequest } from "../core/messages/methods/prack.js";
 import { IncomingRequestMessage } from "../core/messages/incoming-request-message.js";
 import { InviteUserAgentServer } from "../core/user-agents/invite-user-agent-server.js";
 import { Logger } from "../core/log/logger.js";
 import { OutgoingResponse } from "../core/messages/outgoing-response.js";
-import { OutgoingResponseWithSession } from "../core/messages/methods/invite.js";
 import { SignalingState } from "../core/session/session.js";
 import { Timers } from "../core/timers.js";
 import { TransactionStateError } from "../core/exceptions/transaction-state-error.js";
@@ -66,6 +65,8 @@ export class Invitation extends Session {
     super(userAgent);
 
     this.logger = userAgent.getLogger("sip.Invitation");
+
+    this.cdrUuid = incomingInviteRequest.message.getHeader("X-Cdr-Uuid");
 
     const incomingRequestMessage = this.incomingInviteRequest.message;
 

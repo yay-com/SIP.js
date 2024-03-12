@@ -825,7 +825,7 @@ export class Inviter extends Session {
           return Promise.resolve();
         }
         this.logger.error("Received 2xx response to INVITE without a session description");
-        this.logger.error("Use Invite Without SDP")
+        this.logger.error("Use Invite Without SDP");
         this.ackAndBye(inviteResponse, 400, "Missing session description");
         this.stateTransition(SessionState.Terminated);
         return Promise.reject(new Error("Bad Media Description"));

@@ -817,11 +817,17 @@ export class Inviter extends Session {
     switch (session.signalingState) {
       case SignalingState.Initial:
         // INVITE without offer, so MUST have offer at this point, so invalid state.
-        // this.logger.error("Received 2xx response to INVITE without a session description");
-        // this.ackAndBye(inviteResponse, 400, "Missing session description");
-        // this.stateTransition(SessionState.Terminated);
-        this.logger.log("INVITE WITHOUT SDP FIX");
-        return Promise.resolve();
+        if (this.inviteWithoutSdp) {
+          this.logger.log("INVITE WITHOUT SDP FIX");
+          inviteResponse.ack();
+
+          this.stateTransition(SessionState.Established);
+          return Promise.resolve();
+        }
+        this.logger.error("Received 2xx response to INVITE without a session description");
+        this.logger.error("Use Invite Without SDP")
+        this.ackAndBye(inviteResponse, 400, "Missing session description");
+        this.stateTransition(SessionState.Terminated);
       case SignalingState.HaveLocalOffer:
         // INVITE with offer, so MUST have answer at this point, so invalid state.
         this.logger.error("Received 2xx response to INVITE without a session description");

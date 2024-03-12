@@ -828,6 +828,7 @@ export class Inviter extends Session {
         this.logger.error("Use Invite Without SDP")
         this.ackAndBye(inviteResponse, 400, "Missing session description");
         this.stateTransition(SessionState.Terminated);
+        return Promise.reject(new Error("Bad Media Description"));
       case SignalingState.HaveLocalOffer:
         // INVITE with offer, so MUST have answer at this point, so invalid state.
         this.logger.error("Received 2xx response to INVITE without a session description");
